@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+p { text-wrap: pretty; }
+h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+
+/* general */
+
+fieldset {
+    display: flex;
+    flex-direction: column;
+}
+
+table {
+    border-collapse: collapse;
+
+    th {
+        background-color: lightskyblue;
+        text-align: left;
+    }
+
+    td, th {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgb(241, 241, 241);
+    }
+}
+
+/* specific */
+
+body {
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+main {
+    padding-inline: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 40svh;
+    display: flex;
+    flex-direction: column;
+}
+
+#ipt-grammar {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+    resize: vertical;
+}
+
+my-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+h-center {
+    display: flex;
+    justify-content: center;
+}
+
+my-result {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+table {
+    font-family: 'Source Code Pro', monospace;
+}

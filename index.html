@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmos de Compiladores</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.11.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2025.11.1/core.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <h1>Análise Sintática</h1>
+
+        <my-controls>
+            <label for="ipt-grammar">Gramática BNF</label>
+            <textarea name="ipt-grammar" id="ipt-grammar" placeholder="S -> a B ..." rows="10"></textarea>
+
+            <fieldset>
+                <legend>Algoritmo</legend>
+                <label>
+                    <input type="radio" name="ipt-algo" value="preditivo" checked>
+                    Descendente Preditivo
+                </label>
+                <label>
+                    <input type="radio" name="ipt-algo" value="SLR">
+                    Ascendente SLR
+                </label>
+            </fieldset>
+            <h-center>
+                <button type="button" id="btn-execute">Executar</button>
+            </h-center>
+        </my-controls>
+
+        <my-result style="display: none;">
+            <h2>Resultado</h2>
+            <table id="table-first-follow">
+                <thead>
+                    <tr>
+                        <th>X</th>
+                        <th>FIRST(X)</th>
+                        <th>FOLLOW(X)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>S</td><td>{}</td><td>{}</td></tr>
+                    <tr><td>S'</td><td>{a, b}</td><td>{}</td></tr>
+                    <tr><td>S'</td><td>{a, d}</td><td>{}</td></tr>
+                </tbody>
+            </table>
+
+            <table id="table-pred"></table>
+        </my-result>
+    </main>
+
+    <script type="py" src="./index.py" config="./pyscript.toml"></script>
+    <script>
+        document.getElementById('ipt-grammar').value = `E -> T E'
+E' -> + T E'
+E' ->
+T -> F T'
+T' -> * F T'
+T' ->
+F -> ( E )
+F -> id`;
+    </script>
+</body>
+</html>
