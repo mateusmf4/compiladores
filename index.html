@@ -34,7 +34,7 @@
                     Descendente Preditivo
                 </label>
                 <label>
-                    <input type="radio" name="ipt-algo" value="SLR">
+                    <input type="radio" name="ipt-algo" value="SLR" disabled>
                     Ascendente SLR
                 </label>
             </fieldset>
@@ -75,6 +75,10 @@
         </my-h-overflow>
     </my-result>
 
+    <dialog id="loading-dialog" closedby="none">
+        Loading PyScript...
+    </dialog>
+
     <script type="py" src="./index.py" config="./pyscript.toml"></script>
     <script>
         document.getElementById('ipt-grammar').value = `E -> T E'
@@ -85,6 +89,11 @@ T' -> * F T'
 T' ->
 F -> ( E ) | id`;
         document.getElementById('ipt-grammar').dispatchEvent(new InputEvent('input'));
+
+        document.getElementById('loading-dialog').showModal();
+        document.addEventListener('py:ready', () => {
+            document.getElementById('loading-dialog').remove();
+        });
     </script>
 </body>
 </html>

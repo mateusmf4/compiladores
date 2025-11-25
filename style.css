@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; }
-* { margin: 0; }
+*:not(dialog) { margin: 0; }
 img, picture, video, canvas, svg { display: block; max-width: 100%; }
 input, button, textarea, select { font: inherit; }
 p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
@@ -110,4 +110,9 @@ li::marker {
 
 label:has(input[type="checkbox"]) {
     user-select: none;
+}
+
+label:has(input[disabled]) {
+    opacity: 70%;
+    font-style: italic;
 }
