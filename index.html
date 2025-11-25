@@ -13,9 +13,13 @@
         <h1>Análise Sintática</h1>
 
         <my-controls>
-            <label for="ipt-grammar">Gramática BNF</label>
+            <div>
+                <h3 style="font-weight: 600;">Gramática BNF</h3>
+                <span style="font-style: italic; opacity: 80%;">
+                    Todos os símbolos devem ser separados por um espaço. Regra com corpo vazio indica cadeia vazia
+                </span>
+            </div>
             <textarea
-                name="ipt-grammar"
                 id="ipt-grammar"
                 placeholder="S -> a B ..."
                 rows="3"
@@ -38,9 +42,18 @@
                 <button type="button" id="btn-execute">Executar</button>
             </h-center>
         </my-controls>
+    </main>
 
-        <my-result style="display: none;">
-            <h2>Resultado</h2>
+    <my-result style="display: none;">
+        <h2>Resultado</h2>
+
+        <div>
+            <p><b>Regras</b></p>
+            <ol id="rule-list">
+            </ol>
+        </div>
+
+        <my-h-overflow>
             <table id="table-first-follow">
                 <thead>
                     <tr>
@@ -49,18 +62,18 @@
                         <th>FOLLOW(X)</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr><td>S</td><td>{}</td><td>{}</td></tr>
-                    <tr><td>S'</td><td>{a, b}</td><td>{}</td></tr>
-                    <tr><td>S'</td><td>{a, d}</td><td>{}</td></tr>
-                </tbody>
+                <tbody></tbody>
             </table>
+        </my-h-overflow>
 
-            <div style="overflow: auto;">
-                <table id="table-pred"></table>
-            </div>
-        </my-result>
-    </main>
+        <label>
+            <input type="checkbox" id="ipt-table-rule-idx">
+            Mostrar regras como indice
+        </label>
+        <my-h-overflow>
+            <table id="table-pred"></table>
+        </my-h-overflow>
+    </my-result>
 
     <script type="py" src="./index.py" config="./pyscript.toml"></script>
     <script>
@@ -70,8 +83,7 @@ E' ->
 T -> F T'
 T' -> * F T'
 T' ->
-F -> ( E )
-F -> id`;
+F -> ( E ) | id`;
         document.getElementById('ipt-grammar').dispatchEvent(new InputEvent('input'));
     </script>
 </body>

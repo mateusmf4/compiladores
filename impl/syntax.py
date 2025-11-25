@@ -2,6 +2,8 @@ import sys
 from dataclasses import dataclass
 from typing import TypeVar
 
+EPSILON = 'ϵ'
+
 def main():
     grammar_path = sys.argv[1]
     with open(grammar_path) as file:
@@ -30,7 +32,7 @@ class Rule:
     body: list[str]
 
     def __str__(self) -> str:
-        return f'{self.name} → {" ".join(self.body)}'
+        return f'{self.name} -> {" ".join(self.body)}'
 
 @dataclass
 class Grammar:
@@ -56,12 +58,13 @@ def parse_bnf(text: str) -> Grammar:
         if not line: continue
         if line[0] == '#': continue
 
-        name, body_str = map(str.strip, line.split('->', 1))
-        body = body_str.split()
-        if not body: body = ['']
-        rule = Rule(name, body)
-        g.rules.append(rule)
-        g.rule_map.setdefault(name, []).append(rule)
+        name, bodies = map(str.strip, line.split('->', 1))
+        for body_str in bodies.split(' | '):
+            body = body_str.split()
+            if not body or body == [EPSILON]: body = ['']
+            rule = Rule(name, body)
+            g.rules.append(rule)
+            g.rule_map.setdefault(name, []).append(rule)
 
     for rule in g.rules:
         if rule.name not in g.non_terminals:

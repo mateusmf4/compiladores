@@ -35,21 +35,28 @@ table {
 
 /* specific */
 
+:root {
+    --mono-font: 'Source Code Pro', monospace;
+}
+
 body {
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 40svh;
 }
 
 main {
     padding-inline: 2rem;
     padding-top: 1rem;
-    padding-bottom: 40svh;
     display: flex;
     flex-direction: column;
+
+    margin-inline: auto;
+    max-width: 600px;
 }
 
 #ipt-grammar {
-    font-family: 'Source Code Pro', monospace;
+    font-family: var(--mono-font);
     font-size: 14px;
     resize: none;
     box-sizing: content-box;
@@ -70,14 +77,37 @@ h-center {
 my-result {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
+    margin-top: 1rem;
+    padding-inline: 1rem;
+}
+
+my-h-overflow {
+    overflow: auto;
+    width: 100%;
+
+    table {
+        margin-inline: auto;
+    }
 }
 
 table {
-    font-family: 'Source Code Pro', monospace;
+    font-family: var(--mono-font);
 }
 
 #table-pred {
-    min-width: 100%;
     width: max-content;
+}
+
+ol {
+    font-family: var(--mono-font);
+}
+
+li::marker {
+    font-weight: bold;
+}
+
+label:has(input[type="checkbox"]) {
+    user-select: none;
 }

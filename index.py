@@ -18,8 +18,15 @@ def fmt_set(terms):
 def escaped_fmt(fmt: str, *args):
     return fmt.format(*[html.unescape(str(x)) for x in args])
 
+parser: PredParser | None = None
+
 @when("click", "#btn-execute")
 def click_handler(_event):
+    global parser
+    document.querySelector('my-result').style.display = 'none'
+    for n in document.querySelectorAll('.py-error'):
+        n.remove()
+
     grammar_raw = document.getElementById('ipt-grammar').value
     try:
         gm = parse_bnf(grammar_raw)
@@ -28,6 +35,12 @@ def click_handler(_event):
         return
 
     parser = PredParser(gm)
+
+    rule_list = document.getElementById('rule-list')
+    new_html = ''
+    for rule in gm.rules:
+        new_html += escaped_fmt('<li>{}</li>\n', str(rule))
+    rule_list.innerHTML = new_html
 
     tb_body = document.getElementById('table-first-follow').querySelector('tbody')
     new_html = ''
@@ -43,6 +56,18 @@ def click_handler(_event):
     tb_body.innerHTML = new_html
 
     parser.build_table()
+    show_table(parser, rules_as_idx=document.getElementById('ipt-table-rule-idx').checked)
+
+    document.querySelector('my-result').style.display = ''
+
+@when("change", "#ipt-table-rule-idx")
+def click_handler(event):
+    active = event.target.checked
+    if parser:
+        show_table(parser, rules_as_idx=active)
+
+def show_table(parser: PredParser, rules_as_idx: bool):
+    gm = parser.g
     big_table = document.getElementById('table-pred')
 
     ext_terminals = [*gm.terminals, '$']
@@ -53,11 +78,15 @@ def click_handler(_event):
     for nt in gm.non_terminals:
         row = escaped_fmt('<th>{}</th>', nt)
         for t in ext_terminals:
-            text = parser.table.get((nt, t), '')
+            rule = parser.table.get((nt, t))
+            if rule is None:
+                text = ''
+            elif rules_as_idx:
+                text = str(gm.rules.index(rule) + 1)
+            else:
+                text = str(rule)
             row += escaped_fmt('<td>{}</td>', text)
         body_html += f'<tr>{row}</tr>'
     body_html = f'<tbody>{body_html}</tbody>'
 
     big_table.innerHTML = head_html + body_html
-
-    document.querySelector('my-result').style.display = ''
