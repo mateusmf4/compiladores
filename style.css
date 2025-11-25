@@ -51,7 +51,9 @@ main {
 #ipt-grammar {
     font-family: 'Source Code Pro', monospace;
     font-size: 14px;
-    resize: vertical;
+    resize: none;
+    box-sizing: content-box;
+    padding: 0.5em;
 }
 
 my-controls {
@@ -73,4 +75,9 @@ my-result {
 
 table {
     font-family: 'Source Code Pro', monospace;
+}
+
+#table-pred {
+    min-width: 100%;
+    width: max-content;
 }

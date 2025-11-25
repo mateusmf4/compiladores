@@ -11,7 +11,16 @@ def main():
 
     ipt = input("Input: ") if len(sys.argv) == 2 else sys.argv[2]
 
-    pred_parser(ipt.strip().split(), gm)
+    parser = PredParser(gm)
+    parser.build_table()
+
+    print(parser.first_map)
+    print(parser.follow_map)
+    print(parser.table)
+
+    rules = parser.parse(ipt.strip().split())
+    for r in rules:
+        print(r)
 
 T = TypeVar('T')
 
@@ -21,7 +30,7 @@ class Rule:
     body: list[str]
 
     def __str__(self) -> str:
-        return f'{self.name} -> {" ".join(self.body)}'
+        return f'{self.name} → {" ".join(self.body)}'
 
 @dataclass
 class Grammar:
@@ -103,7 +112,9 @@ class PredParser:
         self.first_map[key] = res
         return res
 
-    def follow(self, nt: str) -> set[str]:
+    def follow(self, nt: str, visited: set[int] = None) -> set[str]:
+        if visited is None: visited = set()
+
         key = nt
         if key in self.follow_map: return self.follow_map[key]
 
@@ -111,7 +122,8 @@ class PredParser:
         if nt == self.g.starting_symbol():
             res.add('$')
 
-        for rule in self.g.rules:
+        for rule_idx, rule in enumerate(self.g.rules):
+            if rule_idx in visited: continue
             if nt not in rule.body: continue
 
             for i in range(len(rule.body)):
@@ -125,7 +137,7 @@ class PredParser:
                     has_empty = True
 
                 if has_empty and rule.name != nt:
-                    res.update(self.follow(rule.name))
+                    res.update(self.follow(rule.name, visited.union({rule_idx})))
 
         self.follow_map[key] = res
         return res
@@ -163,91 +175,6 @@ class PredParser:
                     if Y: stack.append(Y)
 
         return out_rules
-
-def pred_parser(tokens: list[str], g: Grammar):
-    first_map: dict[tuple[str, ...], set[str]] = {}
-    def first(syms: list[str]) -> set[str]:
-        nonlocal first_map
-        key = tuple(syms)
-        if key in first_map: return first_map[key]
-
-        if len(syms) == 1:
-            if g.is_terminal(syms[0]):
-                res = {syms[0]}
-            else:
-                res = set().union(*[first(rule.body) for rule in g.rule_map[syms[0]]])
-        else:
-            res = set()
-            has_empty = True
-            # X -> Y Z W
-            for sym in syms:
-                f = first([sym])
-                res.update(f - {''})
-                if '' not in f:
-                    has_empty = False
-                    break
-            if has_empty: res.add('')
-
-        first_map[key] = res
-        return res
-
-    follow_map: dict[str, set[str]] = {}
-    def follow(nt: str) -> set[str]:
-        nonlocal follow_map
-        key = nt
-        if key in follow_map: return follow_map[key]
-
-        res = set()
-        if nt == g.starting_symbol():
-            res.add('$')
-
-        for rule in g.rules:
-            if nt not in rule.body: continue
-
-            for i in range(len(rule.body)):
-                if rule.body[i] != nt: continue
-                # not the last symbol
-                if i != len(rule.body) - 1:
-                    first_rest = first(rule.body[i + 1:])
-                    res.update(first_rest - {''})
-                    has_empty = '' in first_rest
-                else:
-                    has_empty = True
-
-                if has_empty and rule.name != nt:
-                    res.update(follow(rule.name))
-
-        follow_map[key] = res
-        return res
-
-    table: dict[tuple[int, int], Rule] = {}
-    for rule in g.rules:
-        f = first(rule.body)
-        for s in f - {''}:
-            table[(rule.name, s)] = rule
-        if '' in f:
-            for s in follow(rule.name):
-                table[(rule.name, s)] = rule
-
-    tokens = [*tokens, '$']
-    token_idx = 0
-    stack = ['$', g.starting_symbol()]
-    while stack[-1] != '$':
-        top = stack[-1]
-        a = tokens[token_idx]
-        if top == a:
-            token_idx += 1
-            stack.pop()
-        elif g.is_terminal(top):
-            raise Exception(f'parse error: wanted \"{top}\", got \"{a}\"')
-        elif (top, a) not in table:
-            raise Exception(f'parse error: got \"{a}\" while parsing \"{top}\"')
-        else:
-            rule = table[(top, a)]
-            print(rule)
-            stack.pop()
-            for Y in reversed(rule.body):
-                if Y: stack.append(Y)
 
 if __name__ == '__main__':
     main()

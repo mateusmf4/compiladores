@@ -14,7 +14,14 @@
 
         <my-controls>
             <label for="ipt-grammar">Gramática BNF</label>
-            <textarea name="ipt-grammar" id="ipt-grammar" placeholder="S -> a B ..." rows="10"></textarea>
+            <textarea
+                name="ipt-grammar"
+                id="ipt-grammar"
+                placeholder="S -> a B ..."
+                rows="3"
+                oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                spellcheck="false"
+            ></textarea>
 
             <fieldset>
                 <legend>Algoritmo</legend>
@@ -49,7 +56,9 @@
                 </tbody>
             </table>
 
-            <table id="table-pred"></table>
+            <div style="overflow: auto;">
+                <table id="table-pred"></table>
+            </div>
         </my-result>
     </main>
 
@@ -63,6 +72,7 @@ T' -> * F T'
 T' ->
 F -> ( E )
 F -> id`;
+        document.getElementById('ipt-grammar').dispatchEvent(new InputEvent('input'));
     </script>
 </body>
 </html>
