@@ -37,6 +37,10 @@ table {
     }
 }
 
+dialog::backdrop {
+    backdrop-filter: blur(3px);
+}
+
 /* specific */
 
 :root {
