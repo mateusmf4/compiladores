@@ -30,11 +30,11 @@
             <fieldset>
                 <legend>Algoritmo</legend>
                 <label>
-                    <input type="radio" name="ipt-algo" value="preditivo" checked>
+                    <input type="radio" name="ipt-algo" id="ipt-algo-preditivo" checked>
                     Descendente Preditivo
                 </label>
                 <label>
-                    <input type="radio" name="ipt-algo" value="SLR" disabled>
+                    <input type="radio" name="ipt-algo" id="ipt-algo-slr">
                     Ascendente SLR
                 </label>
             </fieldset>
@@ -77,6 +77,15 @@
 
     <dialog id="loading-dialog" closedby="none">
         Loading PyScript...
+    </dialog>
+
+    <dialog id="error-dialog" closedby="any">
+        <form method="dialog">
+            <h2>Erro:</h2>
+            <p>oioioi</p>
+            <br>
+            <button>OK</button>
+        </form>
     </dialog>
 
     <script type="py" src="./index.py" config="./pyscript.toml"></script>

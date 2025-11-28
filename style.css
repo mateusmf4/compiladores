@@ -10,6 +10,10 @@ h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
 
 /* general */
 
+button {
+    user-select: none;
+}
+
 fieldset {
     display: flex;
     flex-direction: column;
@@ -19,7 +23,7 @@ table {
     border-collapse: collapse;
 
     th {
-        background-color: lightskyblue;
+        background-color: light-dark(lightskyblue, #537e99);
         text-align: left;
     }
 
@@ -29,7 +33,7 @@ table {
     }
 
     tr:nth-child(even) {
-        background-color: rgb(241, 241, 241);
+        background-color: light-dark(#f1f1f1, #222);
     }
 }
 
@@ -37,6 +41,7 @@ table {
 
 :root {
     --mono-font: 'Source Code Pro', monospace;
+    color-scheme: light dark;
 }
 
 body {
