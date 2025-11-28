@@ -19,6 +19,7 @@
                     <option value="0">Soma e Mult (Sem recursão a esquerda)</option>
                     <option value="1">Soma e Mult</option>
                     <option value="2">Gramática Ambígua</option>
+                    <option value="3">Mini Java (enorme)</option>
                 </select>
             </label>
 
@@ -104,9 +105,10 @@
         const exemplos = [
             `E -> T E'\nE' -> + T E'\nE' ->\nT -> F T'\nT' -> * F T'\nT' ->\nF -> ( E ) | id`,
             `E -> E + T\nE -> T\nT -> T * F\nT -> F\nF -> ( E )\nF -> id`,
-            `E -> E + E | E * E | id`
+            `E -> E + E | E * E | id`,
+            `S -> stmts\nstmts -> stmt | stmt stmts\nstmt -> { stmts }\nstmt -> attrib ;\nstmt -> if_stmt\nstmt -> for_stmt\nstmt -> while_stmt\n\nattrib -> id = exp\n\nfor_stmt -> for ( id in exp ) stmt\nwhile_stmt -> while ( exp ) stmt\n\nif_stmt -> if ( exp ) stmt else'\nelse' -> else stmt\nelse' ->\n\nexp -> exp + term  | term\nterm -> term * factor | factor\nfactor -> id | num | ( expr )`
         ];
-        const exemploLR = [false, true, null];
+        const exemploLR = [false, true, null, true];
         document.getElementById('ipt-grammar').value = exemplos[0];
         document.getElementById('ipt-grammar').dispatchEvent(new InputEvent('input'));
 
