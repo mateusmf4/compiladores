@@ -25,6 +25,7 @@ def click_handler(_event):
     document.querySelector('my-result').style.display = 'none'
     for n in document.querySelectorAll('.py-error'):
         n.remove()
+    document.querySelector('my-slr-states').style.display = 'none'
 
     try:
         grammar_raw = document.getElementById('ipt-grammar').value
@@ -181,5 +182,15 @@ def handle_slr(gm: Grammar):
     body_html = f'<tbody>{body_html}</tbody>'
 
     big_table.innerHTML = head_html + body_html
+
+    slr_states = document.querySelector('my-slr-states')
+    slr_states.style.display = ''
+
+    new_html = ''
+    for i, state in enumerate(parser.states):
+        new_html += f'<fieldset><legend>I<sub>{i}</sub></legend>'
+        new_html += '\n'.join(escaped_fmt('<span>{}</span>', str(item)) for item in state.items)
+        new_html += '</fieldset>'
+    slr_states.innerHTML = new_html
 
     document.querySelector('my-result').style.display = ''
