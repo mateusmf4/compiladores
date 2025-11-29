@@ -77,7 +77,7 @@ def parse_bnf(text: str) -> Grammar:
         name, bodies = map(str.strip, line.split('->', 1))
         for body_str in bodies.split(' | '):
             body = body_str.split()
-            if not body or body == [EPSILON]: body = ['']
+            if not body or body == [EPSILON]: body = []
             rule = Rule(name, body)
             g.rules.append(rule)
             g.rule_map.setdefault(name, []).append(rule)
@@ -115,6 +115,8 @@ class FirstFollow:
         key = tuple(syms)
         if key in self.first_map: return self.first_map[key]
 
+        if len(syms) == 0:
+            res = {''}
         if len(syms) == 1:
             if self.g.is_terminal(syms[0]):
                 res = {syms[0]}
@@ -206,7 +208,7 @@ class PredParser(FirstFollow):
                 out_rules.append(rule)
                 stack.pop()
                 for Y in reversed(rule.body):
-                    if Y: stack.append(Y)
+                    stack.append(Y)
 
         return out_rules
 
@@ -218,17 +220,16 @@ class RuleItem:
     # symbol right after the dot
     def symbol_after(self) -> str | None:
         if self.idx == len(self.rule.body): return None
-        if self.rule.body == ['']: return None
         return self.rule.body[self.idx]
 
     # symbol right before the dot
     def symbol_before(self) -> str | None:
         if self.idx == 0: return None
-        if self.rule.body == ['']: return None
         return self.rule.body[self.idx - 1]
 
     def __str__(self) -> str:
-        return f'{self.rule.name} -> {" ".join(self.rule.body[:self.idx])}.{" ".join(self.rule.body[self.idx:])}'
+        extra = ' ' if self.idx < len(self.rule.body) else ''
+        return f'{self.rule.name} -> {" ".join(self.rule.body[:self.idx])}{extra}.{" ".join(self.rule.body[self.idx:])}'
 
 @dataclass
 class LRShift:
