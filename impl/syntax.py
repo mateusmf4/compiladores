@@ -218,11 +218,13 @@ class RuleItem:
     # symbol right after the dot
     def symbol_after(self) -> str | None:
         if self.idx == len(self.rule.body): return None
+        if self.rule.body == ['']: return None
         return self.rule.body[self.idx]
 
     # symbol right before the dot
     def symbol_before(self) -> str | None:
         if self.idx == 0: return None
+        if self.rule.body == ['']: return None
         return self.rule.body[self.idx - 1]
 
     def __str__(self) -> str:
