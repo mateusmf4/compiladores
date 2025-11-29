@@ -65,6 +65,7 @@ def handle_pred(gm: Grammar):
     document.querySelector('label:has(> #ipt-table-rule-idx)').style.display = ''
 
     rule_list = document.getElementById('rule-list')
+    rule_list.setAttribute('start', '1')
     new_html = ''
     for rule in gm.rules:
         new_html += escaped_fmt('<li>{}</li>\n', str(rule))
@@ -125,6 +126,7 @@ def handle_slr(gm: Grammar):
     parser.build_table()
 
     rule_list = document.getElementById('rule-list')
+    rule_list.setAttribute('start', '0')
     new_html = ''
     for i, rule in enumerate(gm.rules):
         if i == 0:
